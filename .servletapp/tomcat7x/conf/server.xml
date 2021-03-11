@@ -1,0 +1,57 @@
+<Server port="8205" shutdown="SHUTDOWN" debug="2">
+
+  <!--APR library loader. Documentation at /docs/apr.html -->
+  <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
+  <!--Initialize Jasper prior to webapps are loaded. Documentation at /docs/jasper-howto.html -->
+  <Listener className="org.apache.catalina.core.JasperListener" />
+  <!-- Prevent memory leaks due to use of particular java/javax APIs-->
+  <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
+  <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
+  <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
+
+
+  <Service name="Catalina" debug="2">
+
+    <Connector port="8080" protocol="HTTP/1.1" 
+               connectionTimeout="20000" 
+               redirectPort="8443" 
+               scheme="http"
+               secure="false"
+               debug="2"
+               emptySessionPath="true"
+               URIEncoding="ISO-8859-1" />
+
+     <!-- WEBDSL FIX -->
+     
+           <Connector port="8443" protocol="HTTP/1.1" SSLEnabled="true"
+           maxThreads="150" scheme="https" secure="true"
+           keystoreFile="../.keystore" keystorePass="g5o2jD93FQ83Ge52"
+           clientAuth="false" sslProtocol="TLS" />
+     
+     <!-- WEBDSL FIX -->
+
+    <!-- Define an AJP 1.3 Connector on port 8081 -->
+    <Connector port="8081" protocol="AJP/1.3" redirectPort="8443" />
+
+    <Engine name="Catalina" defaultHost="localhost"
+         debug="2">
+
+      <Realm className="org.apache.catalina.realm.MemoryRealm"/>
+
+      <!-- Define the default virtual host
+           Note: XML Schema validation will not work with Xerces 2.2.
+       -->
+      <Host name="localhost" appBase="webapps"
+            unpackWARs="true" autoDeploy="true"
+            xmlValidation="false" xmlNamespaceAware="false"
+            debug="2">
+
+             <Context path="/Discount" docBase="/Users/thomasvantussenbroek/Documents/Studie/Y5/Q3/WPL/eclipse/Discount/.servletapp/./Discount.war" debug="2"></Context>        
+
+        <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"  
+               prefix="localhost_access_log." suffix=".txt" pattern="common" resolveHosts="false"/>
+
+      </Host>
+    </Engine>
+  </Service>
+</Server>
